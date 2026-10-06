@@ -90,3 +90,83 @@ program
 
     console.log(`Значення поля "${fieldPath}":`, current);
   });
+  program
+  .command('items-summary')
+  .description('Показати позиції замовлення із розрахованою сумою та можливістю сортування')
+  .option('-s, --sort <type>', 'сортування за сумою позиції: asc (зростання) або desc (спадання)')
+  .action((options) => {
+    const opts = program.opts();
+    const data = readData(opts.file);
+
+    let itemsWithSum = (data.items || []).map((item) => {
+      const discount = item.discountPercent ? item.discountPercent / 100 : 0;
+      const priceWithDiscount = item.price * (1 - discount);
+      const totalForItem = priceWithDiscount * item.quantity;
+      
+      return {
+        ...item,
+        totalPrice: Number(totalForItem.toFixed(2))
+      };
+    });
+
+    if (options.sort) {
+      if (options.sort === 'asc') {
+        itemsWithSum.sort((a, b) => a.totalPrice - b.totalPrice);
+      } else if (options.sort === 'desc') {
+        itemsWithSum.sort((a, b) => b.totalPrice - a.totalPrice);
+      } else {
+        console.error('Помилка: Параметр --sort може приймати лише значення "asc" або "desc".');
+        process.exit(1);
+      }
+    }
+
+    console.log(`--- Позиції замовлення ${data.orderId} ---`);
+    itemsWithSum.forEach((item) => {
+      console.log(
+        `- ${item.name} (ID: ${item.productId}): ${item.quantity} шт. x ${item.price} грн` +
+        (item.discountPercent ? ` (-${item.discountPercent}%)` : '') +
+        ` = Сума: ${item.totalPrice} грн`
+      );
+    });
+  });
+
+// 5. Загальна сума замовлення
+program
+  .command('total')
+  .description('Розрахувати та показати загальну суму замовлення з урахуванням знижок')
+  .action(() => {
+    const opts = program.opts();
+    const data = readData(opts.file);
+
+    const totalAmount = (data.items || []).reduce((sum, item) => {
+      const discount = item.discountPercent ? item.discountPercent / 100 : 0;
+      const priceWithDiscount = item.price * (1 - discount);
+      return sum + priceWithDiscount * item.quantity;
+    }, 0);
+
+    console.log(`--- Загальна вартість замовлення ${data.orderId} ---`);
+    console.log(`Сума до сплати: ${totalAmount.toFixed(2)} грн`);
+  });
+
+// 6. Зведення про доставку й оплату
+program
+  .command('summary')
+  .description('Показати повне зведення про статус замовлення, доставку та оплату')
+  .option('--show-notes', 'відобразити примітки до доставки (прапорець)') // Прапорець
+  .action((options) => {
+    const opts = program.opts();
+    const data = readData(opts.file);
+
+    console.log(`=== ЗВЕДЕННЯ ПРО ЗАМОВЛЕННЯ ${data.orderId} ===`);
+    console.log(`Статус: ${data.status}`);
+    console.log(`Оплачено: ${data.isPaid ? 'Так' : 'Ні'} (Метод: ${data.paymentMethod})`);
+    console.log(`Клієнт: ${data.customer.fullName} (${data.customer.phone}, ${data.customer.email})`);
+    console.log(`Адреса доставки: м. ${data.shippingAddress.city}, вул. ${data.shippingAddress.street}, буд. ${data.shippingAddress.building}`);
+    
+    if (options.showNotes) {
+      console.log(`Примітки до доставки: ${data.deliveryNotes || 'Відсутні'}`);
+    }
+  });
+
+// Парсинг аргументів командного рядка (обов'язково в кінці)
+program.parse(process.argv);
