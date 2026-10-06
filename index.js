@@ -4,14 +4,13 @@ import path from 'path';
 
 const program = new Command();
 
-// Налаштування базових відомостей про програму
 program
   .name('order-cli')
   .description('CLI-програма для роботи з даними замовлення')
   .version('1.0.0')
   .option('-f, --file <path>', 'шлях до JSON-файлу', './data.json'); // Глобальна опція з файлом за замовчуванням
 
-// Функція для читання та парсингу JSON
+
 function readData(filePath) {
   const resolvedPath = path.resolve(filePath);
   
@@ -29,7 +28,7 @@ function readData(filePath) {
   }
 }
 
-// 1. Команда: Перелік (list)
+
 program
   .command('list')
   .description('Показати стислий список товарів у замовленні')
@@ -49,7 +48,7 @@ program
     });
   });
 
-// 2. Команда: Один елемент (get)
+
 program
   .command('get')
   .description('Показати повну інформацію про конкретний товар за productId')
@@ -68,7 +67,7 @@ program
     console.log(JSON.stringify(item, null, 2));
   });
 
-// 3. Команда: Окреме поле (field)
+
 program
   .command('field')
   .description('Показати значення окремого або вкладеного поля (наприклад, customer.email або status)')
@@ -130,7 +129,7 @@ program
     });
   });
 
-// 5. Загальна сума замовлення
+
 program
   .command('total')
   .description('Розрахувати та показати загальну суму замовлення з урахуванням знижок')
@@ -148,7 +147,7 @@ program
     console.log(`Сума до сплати: ${totalAmount.toFixed(2)} грн`);
   });
 
-// 6. Зведення про доставку й оплату
+
 program
   .command('summary')
   .description('Показати повне зведення про статус замовлення, доставку та оплату')
@@ -168,5 +167,5 @@ program
     }
   });
 
-// Парсинг аргументів командного рядка (обов'язково в кінці)
+
 program.parse(process.argv);
