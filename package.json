@@ -1,0 +1,24 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "web",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/123123nnn123123/WEB.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/123123nnn123123/WEB/issues"
+  },
+  "homepage": "https://github.com/123123nnn123123/WEB#readme",
+  "dependencies": {
+    "commander": "^15.0.0"
+  }
+}

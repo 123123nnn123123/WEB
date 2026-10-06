@@ -1,0 +1,67 @@
+{ 
+
+  "orderId": "ORD-2026-1541", 
+
+  "createdAt": "2026-08-09T15:41:00Z", 
+
+  "status": "onRoad", 
+
+  "isPaid": true, 
+
+  "paymentMethod": "card", 
+
+  "customer": { 
+
+    "fullName": "Ivanenko Ivan", 
+
+    "email": "ivanivan@gmail.com", 
+
+    "phone": "+380965403616" 
+
+  }, 
+
+  "shippingAddress": { 
+
+    "city": "Lviv", 
+
+    "street": "Lysyka", 
+
+    "building": "2" 
+
+  }, 
+
+  "items": [ 
+
+    { 
+
+      "productId": "02432", 
+
+      "name": "Wireless mouse", 
+
+      "quantity": 2, 
+
+      "price": 2999.99, 
+
+      "discountPercent": 10 
+
+    }, 
+
+    { 
+
+      "productId": "03432", 
+
+      "name": "Headphones", 
+
+      "quantity": 1, 
+
+      "price": 299.00, 
+
+      "discountPercent": null 
+
+    } 
+
+  ], 
+
+  "deliveryNotes": null 
+
+} 
